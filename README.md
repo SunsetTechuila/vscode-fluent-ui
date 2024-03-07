@@ -16,10 +16,10 @@ own risk**.
 # Install
 
 1. Run VSCode as admin.
-    1. This is important, the extension won't work otherwise
+   1. This is important, the extension won't work otherwise
 2. Install the extension from the
    [Marketplace](https://marketplace.visualstudio.com/items?itemName=leandro-rodrigues.fluent-ui-vscode)
-    1. Optiona: Go to settings and adjust the colors (this can be done at any time)
+   1. Optiona: Go to settings and adjust the colors (this can be done at any time)
 3. Run `> Fluent UI: Enable` and reload when prompted
 
 > VSCode will display a notification saying that the installtion is corrupt. That's normal, VSCode
@@ -30,8 +30,8 @@ own risk**.
 # Uninstall
 
 1. Run VSCode as admin.
-    1. This is important, you'll end up with a messed up `workbench.html` file if you run the
-       `Disable` command as regular user.
+   1. This is important, you'll end up with a messed up `workbench.html` file if you run the
+      `Disable` command as regular user.
 2. Run `> Fluent: Disable` and reload when prompted
 3. Uninstall the extension like your normally would
 
@@ -46,24 +46,24 @@ If you ran the command as regular user, here's how you can fix your installation
 
     ```html
     <!-- Copyright (C) Microsoft Corporation. All rights reserved. -->
-    <!DOCTYPE html>
+    <!doctype html>
     <html>
-        <head>
-            <meta charset="utf-8" />
-            <meta
-                http-equiv="Content-Security-Policy"
-                content="default-src 'none'; img-src 'self' https: data: blob: vscode-remote-resource:; media-src 'self'; frame-src 'self' vscode-webview:; object-src 'self'; script-src 'self' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' https: ws:; font-src 'self' https: vscode-remote-resource:;"
-            />
-            <meta
-                http-equiv="Content-Security-Policy"
-                content="require-trusted-types-for 'script'; trusted-types amdLoader cellRendererEditorText defaultWorkerFactory diffEditorWidget stickyScrollViewLayer editorGhostText domLineBreaksComputer editorViewLayer diffReview dompurify notebookRenderer safeInnerHtml standaloneColorizer tokenizeToString;"
-            />
-        </head>
+      <head>
+        <meta charset="utf-8" />
+        <meta
+          http-equiv="Content-Security-Policy"
+          content="default-src 'none'; img-src 'self' https: data: blob: vscode-remote-resource:; media-src 'self'; frame-src 'self' vscode-webview:; object-src 'self'; script-src 'self' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' https: ws:; font-src 'self' https: vscode-remote-resource:;"
+        />
+        <meta
+          http-equiv="Content-Security-Policy"
+          content="require-trusted-types-for 'script'; trusted-types amdLoader cellRendererEditorText defaultWorkerFactory diffEditorWidget stickyScrollViewLayer editorGhostText domLineBreaksComputer editorViewLayer diffReview dompurify notebookRenderer safeInnerHtml standaloneColorizer tokenizeToString;"
+        />
+      </head>
 
-        <body aria-label=""></body>
+      <body aria-label=""></body>
 
-        <!-- Startup (do not modify order of script tags!) -->
-        <script src="workbench.js"></script>
+      <!-- Startup (do not modify order of script tags!) -->
+      <script src="workbench.js"></script>
     </html>
     ```
 
@@ -73,9 +73,9 @@ If you ran the command as regular user, here's how you can fix your installation
 
 ## Known issues
 
--   I'm unable to override the terminal, minimap and in some cases, the scrollbar background. So
-    depending on the syntax theme you choose, the background colors will be off for those elements.
-    You can set the colors for these panels (and others) manually via settings, like so:
+- I'm unable to override the terminal, minimap and in some cases, the scrollbar background. So
+  depending on the syntax theme you choose, the background colors will be off for those elements.
+  You can set the colors for these panels (and others) manually via settings, like so:
 
 ```json
 "workbench.colorCustomizations": {
@@ -101,19 +101,19 @@ background for VSCode.
 
 For example, my current wallpaper is this:
 
-![Wallpaper](./images/wallpaper.png 'Wallpaper')
+![Wallpaper](./images/wallpaper.png "Wallpaper")
 
 VSCode will look like this after sampling the image:
 
-![Wallpaper](./images/vscode-sample-wp.png 'Wallpaper')
+![Wallpaper](./images/vscode-sample-wp.png "Wallpaper")
 
-![Wallpaper](./images/vscode-sample-wp-content.png 'Wallpaper')
+![Wallpaper](./images/vscode-sample-wp-content.png "Wallpaper")
 
 Disabling the background in the settings results in VSCode looking like this:
 
-![Wallpaper](./images/vscode-sample-no-wp.png 'Wallpaper')
+![Wallpaper](./images/vscode-sample-no-wp.png "Wallpaper")
 
-![Wallpaper](./images/vscode-sample-no-wp-content.png 'Wallpaper')
+![Wallpaper](./images/vscode-sample-no-wp-content.png "Wallpaper")
 
 If you change your wallpaper and want to refresh your VSCode you'll have to disable and enable the
 theme again (as admin):
@@ -142,12 +142,12 @@ subtle but can help those with limited space.
 #### Normal mode
 
 ![Normal
-mode](./images/normal-mode.png 'Normal mode')
+mode](./images/normal-mode.png "Normal mode")
 
 #### Compact mode
 
 ![Compact
-mode](./images/compact-mode.png 'Normal mode')
+mode](./images/compact-mode.png "Normal mode")
 
 ### Custom colors
 
@@ -171,67 +171,67 @@ The extension will also do the same on the fly as you preview your syntax theme 
 
 Product icon themes:
 
--   [Fluent Icons](https://marketplace.visualstudio.com/items?itemName=miguelsolorio.fluent-icons)
-    (the one you see in the screenshots)
--   [Carbon](https://marketplace.visualstudio.com/items?itemName=antfu.icons-carbon)
+- [Fluent Icons](https://marketplace.visualstudio.com/items?itemName=miguelsolorio.fluent-icons)
+  (the one you see in the screenshots)
+- [Carbon](https://marketplace.visualstudio.com/items?itemName=antfu.icons-carbon)
 
 The workbench is set to use Segoe UI Variable (the new standard font for Windows 11). I highly
 recommend downloading and installing it. If you don't, the theme will fallback to the default font.
 
--   [Segoe UI variable](https://docs.microsoft.com/en-us/windows/apps/design/downloads/#fonts)
+- [Segoe UI variable](https://docs.microsoft.com/en-us/windows/apps/design/downloads/#fonts)
 
 ### Screenshots
 
 #### Sidebar
 
-![Sidebar preview](./images/sidebar.png 'Sidebar')
+![Sidebar preview](./images/sidebar.png "Sidebar")
 
 #### Activity bar
 
-![Activity bar preview](./images/activitybar.png 'Activity bar')
+![Activity bar preview](./images/activitybar.png "Activity bar")
 
 #### Tabs
 
-![Tabs preview](./images/tab-list.png 'Tabs')
+![Tabs preview](./images/tab-list.png "Tabs")
 
 #### Terminal
 
-![Terminal preview](./images/terminal.png 'Terminal')
+![Terminal preview](./images/terminal.png "Terminal")
 
 #### Search widget
 
-![Search widget preview](./images/search-widget.png 'Search widget')
+![Search widget preview](./images/search-widget.png "Search widget")
 
 #### Command palette
 
-![Command palette preview](./images/command-palette-light.png 'Command palette')
+![Command palette preview](./images/command-palette-light.png "Command palette")
 
 Some of the great themes that go along with this UI (in no particular order):
 
 ## [Serendipity](https://marketplace.visualstudio.com/items?itemName=wicked-labs.wvsc-serendipity)
 
-![Serendipity Light theme preview](./images/serendipity-light.png 'Serendipity Light')
-![Serendipity Dark theme preview](./images/serendipity-dark.png 'Serendipity Dard')
+![Serendipity Light theme preview](./images/serendipity-light.png "Serendipity Light")
+![Serendipity Dark theme preview](./images/serendipity-dark.png "Serendipity Dard")
 
 ## [Copilot](https://marketplace.visualstudio.com/items?itemName=BenjaminBenais.copilot-theme)
 
-![Copilot theme preview](./images/copilot.png 'Copilot')
+![Copilot theme preview](./images/copilot.png "Copilot")
 
 ## [Mariana Pro](https://marketplace.visualstudio.com/items?itemName=rickynormandeau.mariana-pro)
 
-![Mariana Prot theme preview](./images/mariana-pro.png 'Mariana Pro')
+![Mariana Prot theme preview](./images/mariana-pro.png "Mariana Pro")
 
 ## [Night Owl](https://marketplace.visualstudio.com/items?itemName=sdras.night-owl)
 
-![Night Owl Light theme preview](./images/night-owl-light.png 'Night Owl Light')
-![Night Owl Dark theme preview](./images/night-owl-dark.png 'Night Owl Dark')
+![Night Owl Light theme preview](./images/night-owl-light.png "Night Owl Light")
+![Night Owl Dark theme preview](./images/night-owl-dark.png "Night Owl Dark")
 
 ## [One Dark Pro](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
 
-![One Dark Pro theme preview](./images/one-dark-pro.png 'One Dark Pro ')
+![One Dark Pro theme preview](./images/one-dark-pro.png "One Dark Pro ")
 
 ## VSCode default white
 
-![VSCode light theme preview](./images/vscode-default-light.png 'VSCode light')
+![VSCode light theme preview](./images/vscode-default-light.png "VSCode light")
 
 ---

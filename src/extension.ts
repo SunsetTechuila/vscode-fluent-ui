@@ -1,14 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const UglifyJS = require('uglify-js');
-const sharp = require('sharp');
+import uglifyJS from 'uglify-js';
+import sharp from 'sharp';
 import minify from '@node-minify/core';
 import cssnano from '@node-minify/cssnano';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import * as Url from 'url';
 import * as vscode from 'vscode';
-import { nanoid } from 'nanoid';
-import { RequestInfo, RequestInit } from 'node-fetch';
 
 import {
     buildBackupFilePath,
@@ -18,9 +14,6 @@ import {
     restoreBackup,
 } from './backup-helper';
 import { messages } from './messages';
-
-const fetch = (url: RequestInfo, init?: RequestInit) =>
-    import('node-fetch').then(({ default: fetch }) => fetch(url, init));
 
 export const CONTAINER = 'electron-sandbox';
 
@@ -41,19 +34,8 @@ function reloadWindow() {
     vscode.commands.executeCommand('workbench.action.reloadWindow');
 }
 
-const minifyCss = async (css: Buffer) => {
-    try {
-        const output = await postcss([cssnano]).process(css);
-
-        return output.css;
-    } catch (error) {
-        vscode.window.showErrorMessage(error);
-    }
-};
-
 /**
  * Removes injected files from workbench.html file
- * @param  {} html
  */
 function clearHTML(html: string) {
     html = html.replace(/<!-- FUI-CSS-START -->[\s\S]*?<!-- FUI-CSS-END -->\n*/, '');
@@ -62,10 +44,9 @@ function clearHTML(html: string) {
     return html;
 }
 
-async function buildCSSTag(url: string, useThemeColors?: boolean) {
+async function buildCSSTag(url: string) {
     try {
         const fileName = path.join(__dirname, url);
-        const fetched = await fs.readFile(fileName);
 
         const mini = await minify({
             compressor: cssnano,
@@ -79,8 +60,6 @@ async function buildCSSTag(url: string, useThemeColors?: boolean) {
             .catch(function (error) {
                 throw error;
             });
-
-        // const miniCSS = fetched.toString(); //await minifyCss(fetched);
 
         return `<style>${mini}</style>\n`;
     } catch (error) {
@@ -108,9 +87,8 @@ async function getCSSTag() {
     const config = vscode.workspace.getConfiguration('fluent-ui-vscode');
     const activeTheme = vscode.window.activeColorTheme;
     const isDark = activeTheme.kind === 2;
-    const isCompact = config.get('compact');
-    const enableBg = config.get('enableWallpaper');
-    const bgURL = config.get('wallpaperPath');
+    const enableBg = config.get('enableWallpaper') as boolean;
+    const bgURL = config.get('wallpaperPath') as string;
 
     const accent = `${config.get('accent')}`;
     const darkBgColor = `${config.get('darkBackground')}b3`;
@@ -172,7 +150,7 @@ async function buildJsFile(jsFile: string) {
         buffer = buffer.replace(/\[DARK_BG\]/g, `"${darkBgColor}"`);
         buffer = buffer.replace(/\[ACCENT\]/g, `"${accent}"`);
 
-        const uglyJS = UglifyJS.minify(buffer);
+        const uglyJS = uglifyJS.minify(buffer);
 
         await fs.writeFile(jsFile, uglyJS.code, 'utf-8');
 

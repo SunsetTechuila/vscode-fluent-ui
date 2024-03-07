@@ -1,18 +1,15 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as fs from 'node:fs/promises';
+import * as fs from 'fs/promises';
+
 import { messages } from './messages';
 import { CONTAINER } from './extension';
 
 /**
  * Deletes backup files matching UUID
- *
- * @param {*} htmlFile
  */
 export async function deleteBackupFiles(htmlFile: string, jsFile: string) {
     try {
-        const htmlDir = path.dirname(htmlFile);
-
         await fs.unlink(htmlFile);
         console.log('Successfully removed backup file');
         await fs.unlink(jsFile);
@@ -22,21 +19,12 @@ export async function deleteBackupFiles(htmlFile: string, jsFile: string) {
     }
 }
 
-function clearExistingPatches(html: string) {
-    html = html.replace(
-        /^.*(<!-- FUI-JS-START --><script src="fui.js"><\/script><!-- FUI-JS-END -->).*\n?/gm,
-        '',
-    );
-
-    return html;
-}
-
 /**
  * Creates a backup file from the current workspace.html
  */
 export async function createBackup(base: string, htmlFile: string) {
     try {
-        let html = await fs.readFile(htmlFile, 'utf-8');
+        const html = await fs.readFile(htmlFile, 'utf-8');
 
         await fs.writeFile(buildBackupFilePath(base), html, 'utf-8');
     } catch (e) {

@@ -1,9 +1,5 @@
 out
-dist
 node_modules
-.vscode-test/
 *.vsix
-**/*.map
-src/extension.js
-src/messages.js
-src/backup-helper.js
+*.map
+.eslintcache

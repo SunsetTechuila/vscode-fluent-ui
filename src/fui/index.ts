@@ -2,8 +2,6 @@
   // Grab body node
   const bodyNode = document.querySelector("body");
   let isLayoutCompact = false;
-  let isUILite = false;
-  let withResizeListener = false;
   let darkBg = "#202020";
   let lightBg = "#ffffff";
   let accentColor = "#005fb8";
@@ -19,14 +17,14 @@
   };
 
   const resizeObserver = new ResizeObserver((entries) => {
-    for (let entry of entries) {
+    for (const entry of entries) {
       if (entry.contentBoxSize) {
         debounce(applyCompactStyles, 300);
       }
     }
   });
 
-  const watchLayout = (mutationsList, observer) => {
+  const watchLayout = (mutationsList) => {
     for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
         debounce(applyCompactStyles, 300);
@@ -34,7 +32,7 @@
     }
   };
 
-  const watchAttributes = (mutationsList, observer) => {
+  const watchAttributes = (mutationsList) => {
     for (const mutation of mutationsList) {
       if (mutation.type === "attributes") {
         console.log("Attribute changed on chromium");
@@ -52,8 +50,8 @@
     }
   };
 
-  const watchSplitViewChildren = (mutationsList, observer) => {
-    for (let mutation of mutationsList) {
+  const watchSplitViewChildren = (mutationsList) => {
+    for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
         debounce(adjustScrollableWidth, 180);
       }
@@ -62,8 +60,8 @@
   const editorChildrenObserver = new MutationObserver(watchSplitViewChildren);
 
   // Callback function to execute when mutations are observed
-  const watchForBootstrap = (mutationsList, observer) => {
-    for (let mutation of mutationsList) {
+  const watchForBootstrap = (mutationsList) => {
+    for (const mutation of mutationsList) {
       if (mutation.type === "attributes") {
         debugger;
         // does the style div exist yet?
@@ -100,7 +98,7 @@
     darkBg = darkBgColor;
     lightBg = lightBgColor;
 
-    var themeStyleTag = document.querySelector(".vscode-tokens-styles");
+    const themeStyleTag = document.querySelector(".vscode-tokens-styles");
 
     if (!themeStyleTag) {
       return;

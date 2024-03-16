@@ -1,4 +1,4 @@
-:root {
+:root:has(.monaco-workbench.vs-dark) {
   --card-bg: CARD_DARK_BG_COLOR;
   --active-action-item-bg: var(--card-bg);
   --activitybar-indicator-bg: #60cdff;

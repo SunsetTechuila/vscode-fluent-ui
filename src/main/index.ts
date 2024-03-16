@@ -1,10 +1,8 @@
-import uglifyJS from "uglify-js";
+import fs from "node:fs/promises";
+import path from "node:path";
+
 import sharp from "sharp";
-import minify from "@node-minify/core";
-import cssnano from "@node-minify/cssnano";
-import * as fs from "fs/promises";
-import * as path from "path";
-import * as vscode from "vscode";
+import vscode from "vscode";
 
 import {
   buildBackupFilePath,
@@ -30,7 +28,6 @@ function restart() {
 }
 
 function reloadWindow() {
-  // reload vscode-window
   vscode.commands.executeCommand("workbench.action.reloadWindow");
 }
 
@@ -44,27 +41,15 @@ function clearHTML(html: string) {
   return html;
 }
 
-async function buildCSSTag(url: string) {
+async function buildCSSTag(fileRelativePath: string) {
   try {
-    const fileName = path.join(__dirname, url);
+    const fileAbsolutePath = path.join(__dirname, fileRelativePath);
+    const stylesContent = await fs.readFile(fileAbsolutePath, "utf-8");
 
-    const mini = await minify({
-      compressor: cssnano,
-      input: fileName,
-      output: path.join(__dirname, "/css/chrome-min.css"),
-    })
-      .then(function (min) {
-        console.log("CSS min");
-        return min;
-      })
-      .catch(function (error) {
-        throw error;
-      });
-
-    return `<style>${mini}</style>\n`;
+    return `<style>${stylesContent}</style>\n`;
   } catch (error) {
     vscode.window.showErrorMessage(error);
-    vscode.window.showWarningMessage(messages.cannotLoad + url);
+    vscode.window.showWarningMessage(messages.cannotLoad + fileRelativePath);
   }
 }
 
@@ -85,8 +70,7 @@ export async function getBase64Image(wallPath: string) {
 
 async function getCSSTag() {
   const config = vscode.workspace.getConfiguration("fluent-ui-vscode");
-  const activeTheme = vscode.window.activeColorTheme;
-  const isDark = activeTheme.kind === 2;
+
   const enableBg = config.get("enableWallpaper") as boolean;
   const bgURL = config.get("wallpaperPath") as string;
 
@@ -100,45 +84,35 @@ async function getCSSTag() {
     encodedImage = await getBase64Image(bgURL);
   }
 
-  let res = "";
+  const stylesPath = "dist/styles.css";
 
-  const styles = ["/css/editor_chrome.css", isDark ? "/css/dark_vars.css" : ""];
+  let cssTagContent = await buildCSSTag(stylesPath);
 
-  for (const url of styles) {
-    let imp = await buildCSSTag(url);
+  if (cssTagContent) {
+    cssTagContent = cssTagContent.replace("CARD_DARK_BG_COLOR", darkBgColor);
+    cssTagContent = cssTagContent.replace("CARD_LIGHT_BG_COLOR", lightBgColor);
+    cssTagContent = cssTagContent.replace("ACCENT_COLOR", accent);
 
-    if (imp) {
-      if (url.includes("dark")) {
-        imp = imp.replace("CARD_DARK_BG_COLOR", darkBgColor);
-      } else {
-        imp = imp.replace("CARD_LIGHT_BG_COLOR", lightBgColor);
-        imp = imp.replace("ACCENT_COLOR", accent);
-      }
+    if (!enableBg) {
+      cssTagContent = cssTagContent.replace("APP_BG", "transparent");
+    } else {
+      cssTagContent = cssTagContent.replace("APP_BG", "var(--card-bg)");
+    }
 
-      if (!enableBg) {
-        imp = imp.replace("APP_BG", "transparent");
-      } else {
-        imp = imp.replace("APP_BG", "var(--card-bg)");
-      }
-
-      res += imp;
+    if (encodedImage) {
+      cssTagContent = cssTagContent.replace("dummy", encodedImage);
     }
   }
 
-  if (encodedImage) {
-    // Replace --app-bg value on res
-    res = res.replace("dummy", encodedImage);
-  }
-
-  return res;
+  return cssTagContent;
 }
 
 async function buildJsFile(jsFile: string) {
   try {
-    const url = "/js/theme_template.js";
+    const fuiScriptRelativePath = "./fui.js";
     const config = vscode.workspace.getConfiguration("fluent-ui-vscode");
-    const jsTemplate = await fs.readFile(__dirname + url);
-    let buffer = jsTemplate.toString();
+    const fuiScript = await fs.readFile(__dirname + fuiScriptRelativePath);
+    let buffer = fuiScript.toString();
 
     const isCompact = config.get("compact");
     const accent = `${config.get("accent")}`;
@@ -150,9 +124,7 @@ async function buildJsFile(jsFile: string) {
     buffer = buffer.replace(/\[DARK_BG\]/g, `"${darkBgColor}"`);
     buffer = buffer.replace(/\[ACCENT\]/g, `"${accent}"`);
 
-    const uglyJS = uglifyJS.minify(buffer);
-
-    await fs.writeFile(jsFile, uglyJS.code, "utf-8");
+    await fs.writeFile(jsFile, buffer, "utf-8");
 
     return;
   } catch (error) {
@@ -188,7 +160,7 @@ async function patch({ htmlFile, jsFile, bypassMessage }: PatchArgs) {
     } else {
       enabledRestart();
     }
-  } catch (e) {
+  } catch {
     vscode.window.showInformationMessage(messages.admin);
   }
 }

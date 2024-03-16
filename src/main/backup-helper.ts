@@ -1,9 +1,10 @@
-import * as vscode from "vscode";
-import * as path from "path";
-import * as fs from "fs/promises";
+import path from "node:path";
+import fs from "node:fs/promises";
+
+import vscode from "vscode";
 
 import { messages } from "./messages";
-import { CONTAINER } from "./extension";
+import { CONTAINER } from ".";
 
 /**
  * Deletes backup files matching UUID
